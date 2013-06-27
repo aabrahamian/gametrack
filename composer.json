@@ -1,0 +1,13 @@
+{
+    "name": "aabrahamian/gametrack",
+    "description": "Concept testing with silex framework",
+    "authors": [
+        {
+            "name": "Alex Abrahamian",
+            "email": "trebekistheman@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "~1.0"
+    }
+}
