@@ -1,5 +1,9 @@
 <?php
 
+namespace GameTrack\Person;
+
+use GameTrack\Util\SuperController;
+
 use Silex\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,22 +14,37 @@ class PersonController extends SuperController implements ControllerProviderInte
 	public function connect(Application $app)
 	{
 		$this->app = $app;
+		$this->model = new PersonFSModel();
 		
 		$person = $app["controllers_factory"];
 		
 		$person->get("/{personID}", array($this, "getPerson"));
 //		$person->post("/", array($this, "createPerson"));
-//		$person->put("/{personID}", array($this, "setPerson"));
+		$person->put("/{personID}", array($this, "setPerson"));
 //		$person->delete("/{personID}", array($this, "deletePerson"));
+		
+		//use for first time setup
+		$person->post("/setup", array($this, "loadIntoPersistence"));
 
 		return $person;
 	}
 	
+	public function loadIntoPersistence(Request $request)
+	{
+		$oracle = new PersonMockModel();
+		$data = $oracle->getAll();
+		foreach ($data as $id => $value) {
+			$this->model->setPerson($id, $value);
+		}
+		
+		$response = new Response(null, 204);
+		
+		return $response;
+	}
+	
 	public function getPerson(Request $request, $personID)
 	{
-		$model = new PersonMockModel();
-		
-		$responseData = $model->getPerson($personID);
+		$responseData = $this->model->getPerson($personID);
 		
 		$contentDepth = $request->headers->get("Content-Depth");
 		
@@ -39,10 +58,21 @@ class PersonController extends SuperController implements ControllerProviderInte
 				$responseData['address'][] = $this->grabSubResource($resourcePath, $request);
 			}
 		}
-		$responseData['contentdepth'] = $contentDepth;
 		
 		$responseData = json_encode($responseData);
-		$response = new Response($responseData, 200, array("X-CRAZY-HEADER" => "Alex"));
+		$response = new Response($responseData, 200);
+		
+		return $response;
+	}
+	
+	public function setPerson(Request $request, $personID)
+	{
+		$newPersonContent = $request->getContent();
+		$newPersonContent = json_decode($newPersonContent, true);
+		
+		$responseData = $this->model->setPerson($personID, $newPersonContent);
+		
+		$response = new Response(null, 204);
 		
 		return $response;
 	}

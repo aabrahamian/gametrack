@@ -1,5 +1,7 @@
 <?php
 
+namespace GameTrack\Game;
+
 class GameMockModel 
 {
 	protected $games;
@@ -26,6 +28,11 @@ class GameMockModel
 				'type' => "computer",
 			),
 		);
+	}
+	
+	public function getAll()
+	{
+		return $this->games;
 	}
 	
 	/**

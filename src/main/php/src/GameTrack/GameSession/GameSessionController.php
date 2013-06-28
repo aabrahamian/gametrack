@@ -1,5 +1,9 @@
 <?php
 
+namespace GameTrack\GameSession;
+
+use GameTrack\Util\SuperController;
+
 use Silex\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,21 +14,37 @@ class GameSessionController extends SuperController implements ControllerProvide
 	public function connect(Application $app)
 	{
 		$this->app = $app;
+		$this->model = new GameSessionFSModel();
 		
 		$gamesession = $app["controllers_factory"];
 		
 		$gamesession->get("/{gamesessionID}", array($this, "getGameSession"));
 //		$gamesession->post("/", array($this, "createGameSession"));
-//		$gamesession->put("/{gamesessionID}", array($this, "setGameSession"));
+		$gamesession->put("/{gamesessionID}", array($this, "setGameSession"));
 //		$gamesession->delete("/{gamesessionID}", array($this, "deleteGameSession"));
+		
+		//use for first time setup
+		$gamesession->post("/setup", array($this, "loadIntoPersistence"));
 
 		return $gamesession;
 	}
 	
+	public function loadIntoPersistence(Request $request)
+	{
+		$oracle = new GameSessionMockModel();
+		$data = $oracle->getAll();
+		foreach ($data as $id => $value) {
+			$this->model->setGameSession($id, $value);
+		}
+		
+		$response = new Response(null, 204);
+		
+		return $response;
+	}
+	
 	public function getGameSession(Request $request, $gamesessionID)
 	{
-		$model = new GameSessionMockModel();
-		$responseData = $model->getGameSession($gamesessionID);
+		$responseData = $this->model->getGameSession($gamesessionID);
 		
 		//if the content depth is greater than 1, grab lower level subrequests
 		$contentDepth = $request->headers->get("Content-Depth");
@@ -53,13 +73,24 @@ class GameSessionController extends SuperController implements ControllerProvide
 			}
 			
 			//sublevel address
-			$resourcePath = "/person/{$responseData['address']['addressID']}";
+			$resourcePath = "/address/{$responseData['address']['addressID']}";
 			$responseData['address'] = $this->grabSubResource($resourcePath, $request);
 		}
-		$responseData['contentdepth'] = $contentDepth;
 		
 		$responseData = json_encode($responseData);
-		$response = new Response($responseData, 200, array("X-CRAZY-HEADER" => "Alex"));
+		$response = new Response($responseData, 200);
+		
+		return $response;
+	}
+	
+	public function setGameSession(Request $request, $gamesessionID)
+	{
+		$newGameSessionContent = $request->getContent();
+		$newGameSessionContent = json_decode($newGameSessionContent, true);
+		
+		$responseData = $this->model->setGameSession($gamesessionID, $newGameSessionContent);
+		
+		$response = new Response(null, 204);
 		
 		return $response;
 	}

@@ -1,11 +1,14 @@
 <?php
 
+namespace GameTrack\Util;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class SuperController
 {
 	protected $app;
+	protected $model;
 	
 	protected function grabSubResource($resourcePath, $request)
 	{

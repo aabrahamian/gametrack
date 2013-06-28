@@ -1,5 +1,9 @@
 <?php
 
+namespace GameTrack\Company;
+
+use GameTrack\Util\SuperController;
+
 use Silex\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,21 +14,37 @@ class CompanyController extends SuperController implements ControllerProviderInt
 	public function connect(Application $app)
 	{
 		$this->app = $app;
+		$this->model = new CompanyFSModel();
 		
 		$company = $app["controllers_factory"];
 		
 		$company->get("/{companyID}", array($this, "getCompany"));
 //		$company->post("/", array($this, "createCompany"));
-//		$company->put("/{companyID}", array($this, "setCompany"));
+		$company->put("/{companyID}", array($this, "setCompany"));
 //		$company->delete("/{companyID}", array($this, "deleteCompany"));
 
+		//use for first time setup
+		$company->post("/setup", array($this, "loadIntoPersistence"));
+		
 		return $company;
+	}
+	
+	public function loadIntoPersistence(Request $request)
+	{
+		$oracle = new CompanyMockModel();
+		$data = $oracle->getAll();
+		foreach ($data as $id => $value) {
+			$this->model->setCompany($id, $value);
+		}
+		
+		$response = new Response(null, 204);
+		
+		return $response;
 	}
 	
 	public function getCompany(Request $request, $companyID)
 	{
-		$model = new CompanyMockModel();
-		$responseData = $model->getCompany($companyID);
+		$responseData = $this->model->getCompany($companyID);
 		
 		//if the content depth is greater than 1, grab lower level subrequests
 		$contentDepth = $request->headers->get("Content-Depth");
@@ -43,10 +63,21 @@ class CompanyController extends SuperController implements ControllerProviderInt
 				$responseData['game'][] = $this->grabSubResource($resourcePath, $request);
 			}
 		}
-		$responseData['contentdepth'] = $contentDepth;
 		
 		$responseData = json_encode($responseData);
-		$response = new Response($responseData, 200, array("X-CRAZY-HEADER" => "Alex"));
+		$response = new Response($responseData, 200);
+		
+		return $response;
+	}
+	
+	public function setCompany(Request $request, $companyID)
+	{
+		$newCompanyContent = $request->getContent();
+		$newCompanyContent = json_decode($newCompanyContent, true);
+		
+		$responseData = $this->model->setCompany($companyID, $newCompanyContent);
+		
+		$response = new Response(null, 204);
 		
 		return $response;
 	}

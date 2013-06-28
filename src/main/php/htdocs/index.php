@@ -1,11 +1,14 @@
 <?php
 
-//use JDesrosiers\Service\Cart\CartControllerProvider;
-//use JDesrosiers\Service\Cart\CartServiceProvider;
+use GameTrack\Address\AddressController;
+use GameTrack\Company\CompanyController;
+use GameTrack\Game\GameController;
+use GameTrack\GameSession\GameSessionController;
+use GameTrack\Person\PersonController;
+
 use Silex\Application;
 
 require_once __DIR__ . "/../../../../vendor/autoload.php";
-require_once __DIR__ . "/../include.php";
 
 //initialize app
 $app = new Application();

@@ -1,12 +1,14 @@
 <?php
 
+namespace GameTrack\GameSession;
+
 class GameSessionMockModel 
 {
-	protected $companies;
+	protected $gamesessions;
 	
 	public function __construct()
 	{
-		$this->companies = array(
+		$this->gamesessions = array(
 			"1" => array(
 				'gamesessionID' => "1",
 				'address' => array('addressID' => 4),
@@ -56,6 +58,11 @@ class GameSessionMockModel
 		);
 	}
 	
+	public function getAll()
+	{
+		return $this->gamesessions;
+	}
+	
 	/**
 	 * GET a gamesession.
 	 * @param type $gamesessionID
@@ -63,8 +70,8 @@ class GameSessionMockModel
 	 */
 	public function getGameSession($gamesessionID)
 	{
-		if(array_key_exists($gamesessionID, $this->companies)) {
-			return $this->companies[$gamesessionID];
+		if(array_key_exists($gamesessionID, $this->gamesessions)) {
+			return $this->gamesessions[$gamesessionID];
 		}
 		else {
 			return null;

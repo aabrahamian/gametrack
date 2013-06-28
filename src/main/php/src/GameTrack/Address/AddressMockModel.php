@@ -1,5 +1,7 @@
 <?php
 
+namespace GameTrack\Address;
+
 class AddressMockModel 
 {
 	protected $addresses;
@@ -44,6 +46,11 @@ class AddressMockModel
 				'state' => "CA",
 			),
 		);
+	}
+	
+	public function getAll()
+	{
+		return $this->addresses;
 	}
 	
 	/**

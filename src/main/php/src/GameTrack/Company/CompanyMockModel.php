@@ -1,5 +1,7 @@
 <?php
 
+namespace GameTrack\Company;
+
 class CompanyMockModel 
 {
 	protected $companies;
@@ -33,6 +35,11 @@ class CompanyMockModel
 				),
 			),
 		);
+	}
+	
+	public function getAll()
+	{
+		return $this->companies;
 	}
 	
 	/**

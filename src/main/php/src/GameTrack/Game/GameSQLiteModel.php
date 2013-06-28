@@ -1,5 +1,7 @@
 <?php
 
+namespace GameTrack\Game;
+
 class GameSQLiteModel 
 {
 	protected $db;

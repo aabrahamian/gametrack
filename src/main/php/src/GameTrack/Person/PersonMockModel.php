@@ -1,5 +1,7 @@
 <?php
 
+namespace GameTrack\Person;
+
 class PersonMockModel 
 {
 	protected $persons;
@@ -49,6 +51,11 @@ class PersonMockModel
 				),
 			),
 		);
+	}
+	
+	public function getAll()
+	{
+		return $this->persons;
 	}
 	
 	/**
