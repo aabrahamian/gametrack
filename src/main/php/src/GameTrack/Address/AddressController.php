@@ -51,6 +51,8 @@ class AddressController extends SuperController implements ControllerProviderInt
 		$responseData = json_encode($responseData);
 		
 		$response = new Response($responseData, 200);
+		$response->setSharedMaxAge(120);
+		$response->setPublic();
 		
 		return $response;
 	}

@@ -21,6 +21,9 @@ class GameFSModel
 	 */
 	public function getGame($gameID)
 	{
+		//simulate long process
+		sleep(1);
+		
 		$data = $this->storage->fetch($gameID);
 		$data = json_decode($data, true);
 		return $data;

@@ -22,6 +22,9 @@ class CompanyFSModel
 	 */
 	public function getCompany($companyID)
 	{
+		//simulate long process
+		sleep(1);
+		
 		$data = $this->storage->fetch($companyID);
 		$data = json_decode($data, true);
 		return $data;

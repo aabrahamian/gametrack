@@ -20,7 +20,9 @@ class SuperController
 		if ($request->getSession()) {
 			 $subRequest->setSession($request->getSession());
 		}
-		$subResponse = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+		$subResponse = $this->app['http_cache']->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+		$subResponse->setSharedMaxAge(120);
+		$subResponse->setPublic();
 		$subData = json_decode($subResponse->getContent(), true);
 		return $subData;
 	}

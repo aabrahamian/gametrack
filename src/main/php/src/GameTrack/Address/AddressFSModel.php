@@ -21,6 +21,9 @@ class AddressFSModel
 	 */
 	public function getAddress($addressID)
 	{
+		//simulate long process
+		sleep(1);
+		
 		$data = $this->storage->fetch($addressID);
 		$data = json_decode($data, true);
 		return $data;

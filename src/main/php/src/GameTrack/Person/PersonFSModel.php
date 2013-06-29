@@ -21,6 +21,9 @@ class PersonFSModel
 	 */
 	public function getPerson($personID)
 	{
+		//simulate long process
+		sleep(1);
+		
 		$data = $this->storage->fetch($personID);
 		$data = json_decode($data, true);
 		return $data;
