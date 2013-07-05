@@ -1,0 +1,59 @@
+{
+    "title": "Address Collection",
+    "type": "object",
+    "properties": {
+        "collection": {
+            "title": "Collection",
+            "type": "array",
+            "items": {
+                "$ref": "/apischema/address.json"
+            }
+        },
+        "currPage": {
+            "title": "Current Page",
+            "type": "int"
+        },
+        "nextPage": {
+            "title": "Next Page",
+            "type": "int"
+        },
+        "prevPage": {
+            "title": "Previous Page",
+            "type": "int"
+        },
+        "perPage": {
+            "title": "Per Page",
+            "type": "int"
+        }
+    },
+    "links": [
+        {
+            "title": "Get address collection",
+            "rel": "self",
+            "method": "GET",
+            "href": "/address?page={currPage}&perPage={perPage}"
+        },
+        {
+            "title": "Create new address",
+            "rel": "create",
+            "method": "POST",
+            "href": "/address",
+            "schema": {
+                "type": "object",
+                "$ref": "/apischema/address.json"
+            }
+        },
+        {
+            "title": "Get next page",
+            "rel": "next",
+            "method": "GET",
+            "href": "/address?page={nextPage}&perPage={perPage}"
+        },
+        {
+            "title": "Get prev page",
+            "rel": "prev",
+            "method": "GET",
+            "href": "/address?page={prevPage}&perPage={perPage}"
+        }
+    ]
+}

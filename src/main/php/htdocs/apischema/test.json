@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "title": "First name"
+        }
+    },
+    "patternProperties": {
+        "[nN]ame": {
+            "title": "Name",
+            "type": "string"
+        }
+    }
+}

@@ -1,0 +1,79 @@
+{
+    "title": "Person",
+    "type": "object",
+    "properties": {
+        "personID": {
+            "title": "Person Identifier",
+            "type": "int"
+        },
+        "firstName": {
+            "title": "First Name",
+            "type": "string"
+        },
+        "lastName": {
+            "title": "Last Name",
+            "type": "string"
+        },
+        "address": {
+            "type": "array",
+				"description": "The multiple reference way, note that you won't need a link in the bottom for this",
+            "items": {
+                "$ref": "/apischema/address.json#/definitions/reference"
+            }
+        },
+        "address2": {
+            "type": "object",
+				"description": "The single object reference way, note that you won't need a link in the bottom for this",
+            "$ref": "/apischema/address.json#/definitions/reference"
+        },
+        "addressID": {
+				"title": "Associated Address Identifier",
+				"description": "The single reference way, note that you will need a link in the bottom for this",
+            "type": "int"
+        }
+    },
+    "required": [
+        "firstName",
+        "lastName"
+    ],
+    "definitions": {
+        "reference": {
+            "links": [
+                {
+                    "rel": "full",
+                    "href": "/person/{personID}"
+                }
+            ]
+        }
+    },
+    "links": [
+        {
+            "title": "Get person info",
+            "rel": "self",
+            "method": "GET",
+            "href": "/person/{personID}"
+        },
+        {
+            "title": "Edit person info",
+            "rel": "edit",
+            "method": "PUT",
+            "href": "/person/{personID}",
+            "$schema": {
+                "type": "object",
+                "$ref": "/apischema/person.json"
+            }
+        },
+        {
+            "title": "Get person collection",
+            "rel": "instances",
+            "method": "GET",
+            "href": "/person"
+        },
+		  {
+			  "title": "Get address",
+            "rel": "address",
+            "method": "GET",
+            "href": "/address/{addressID}"
+		  }
+    ]
+}

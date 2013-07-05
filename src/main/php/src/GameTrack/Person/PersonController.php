@@ -64,6 +64,8 @@ class PersonController extends SuperController implements ControllerProviderInte
 //		$response->setSharedMaxAge(120);
 //		$response->setPublic();
 		
+		$response->headers->set("Content-Type", "application/json; profile=/apischema/person.json");
+		
 		return $response;
 	}
 	

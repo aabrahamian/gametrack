@@ -1,0 +1,61 @@
+{
+    "title": "Address",
+    "type": "object",
+    "properties": {
+        "addressID": {
+            "title": "Address Identifier",
+            "type": "int"
+        },
+        "street1": {
+            "title": "First Address Line",
+            "type": "string"
+        },
+        "city": {
+            "title": "City",
+            "type": "string"
+        },
+        "state": {
+            "title": "State",
+            "type": "string"
+        }
+    },
+    "required": [
+        "street1",
+        "city",
+        "state"
+    ],
+    "definitions": {
+        "reference": {
+            "links": [
+                {
+                    "rel": "full",
+                    "href": "/address/{addressID}"
+                }
+            ]
+        }
+    },
+    "links": [
+        {
+            "title": "Get address info",
+            "rel": "self",
+            "method": "GET",
+            "href": "/address/{addressID}"
+        },
+        {
+            "title": "Edit address info",
+            "rel": "update",
+            "method": "PUT",
+            "href": "/address/{addressID}",
+            "$schema": {
+                "type": "object",
+                "$ref": "/apischema/address.json"
+            }
+        },
+        {
+            "title": "Get address collection",
+            "rel": "instances",
+            "method": "GET",
+            "href": "/address"
+        }
+    ]
+}

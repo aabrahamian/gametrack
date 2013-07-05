@@ -45,6 +45,12 @@ class AddressMockModel
 				'city' => "SLO",
 				'state' => "CA",
 			),
+			"7" => array(
+				'addressID' => "7",
+				'street1' => "789 Made Up Lane",
+				'city' => "SLO",
+				'state' => "CA",
+			),
 		);
 	}
 	
